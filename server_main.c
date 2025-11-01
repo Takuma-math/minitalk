@@ -6,7 +6,7 @@
 /*   By: takhayas <hayatakucat@icloud.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:37:48 by takhayas          #+#    #+#             */
-/*   Updated: 2025/10/27 21:23:44 by takhayas         ###   ########.fr       */
+/*   Updated: 2025/11/01 22:43:42 by takhayas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	signal_handler(int signo)
 			write (1, "\n", 1);
 		else
 			write (1, &current_char, 1);
+		bit_counter = 0;
+		current_char = 0;
 	}
-	bit_counter = 0;
-	current_char = 0;
 	return ;
 }
 
@@ -47,4 +47,11 @@ int	main(void)
 
 	ft_printf("%d\n", getpid());
 	set_sigaction(&sa);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+		return (1);
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
+		return (1);
+	while (1)
+		pause();
+	return (0);
 }
