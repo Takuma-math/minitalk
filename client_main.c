@@ -6,12 +6,13 @@
 /*   By: takhayas <hayatakucat@icloud.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:09:12 by takhayas          #+#    #+#             */
-/*   Updated: 2025/11/01 23:36:45 by takhayas         ###   ########.fr       */
+/*   Updated: 2025/11/02 00:39:17 by takhayas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-int send_char_as_bit(pid_t pid, char c)
+
+int	send_char_as_bit(pid_t pid, char c)
 {
 	int	send_bits;
 	int	is_kill_error;
@@ -19,12 +20,11 @@ int send_char_as_bit(pid_t pid, char c)
 	send_bits = 0;
 	while (send_bits < 8)
 	{
-		if ((c & (1 << send_bits))!= 0)
+		if ((c & (1 << send_bits)) != 0)
 		{
 			is_kill_error = kill(pid, SIGUSR2);
 			usleep(100);
 		}
-
 		else
 		{
 			is_kill_error = kill(pid, SIGUSR1);
@@ -36,6 +36,7 @@ int send_char_as_bit(pid_t pid, char c)
 	}
 	return (0);
 }
+
 int	pid_parser(char *str)
 {
 	int	i;
@@ -49,6 +50,7 @@ int	pid_parser(char *str)
 	}
 	return (0);
 }
+
 int	main(int argc, char **argv)
 {
 	pid_t	server_pid;
@@ -69,6 +71,6 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	if (send_char_as_bit(server_pid, '\0'))
-        return (1);
+		return (1);
 	return (0);
 }
