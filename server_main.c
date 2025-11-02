@@ -6,7 +6,7 @@
 /*   By: takhayas <hayatakucat@icloud.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:37:48 by takhayas          #+#    #+#             */
-/*   Updated: 2025/11/02 22:15:37 by takhayas         ###   ########.fr       */
+/*   Updated: 2025/11/03 01:16:16 by takhayas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	signal_handler(int signo, siginfo_t *info, void *context)
 		bit_counter = 0;
 		current_char = 0;
 	}
+	if (kill(info->si_pid, SIGUSR1) == -1)
+		current_client_pid = 0;
 	return ;
 }
 
