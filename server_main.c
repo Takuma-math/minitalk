@@ -6,17 +6,28 @@
 /*   By: takhayas <hayatakucat@icloud.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 14:37:48 by takhayas          #+#    #+#             */
-/*   Updated: 2025/11/01 22:43:42 by takhayas         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:15:37 by takhayas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	signal_handler(int signo)
+void	reset_server(pid_t *pid, int *bit_count, char *c, siginfo_t *info)
 {
-	static int	bit_counter;
-	static char	current_char;
+	*pid = info->si_pid;
+	*bit_count = 0;
+	*c = 0;
+}
 
+void	signal_handler(int signo, siginfo_t *info, void *context)
+{
+	static pid_t	current_client_pid;
+	static int		bit_counter;
+	static char		current_char;
+
+	(void)context;
+	if (current_client_pid != info->si_pid)
+		reset_server(&current_client_pid, &bit_counter, &current_char, info);
 	if (signo == SIGUSR2)
 		current_char = current_char | (1 << bit_counter);
 	bit_counter++;
@@ -34,11 +45,11 @@ void	signal_handler(int signo)
 
 void	set_sigaction(struct sigaction *sa)
 {
-	sa->sa_handler = signal_handler;
+	sa->sa_flags = SA_SIGINFO;
+	sa->sa_sigaction = signal_handler;
 	sigemptyset(&sa->sa_mask);
 	sigaddset(&sa->sa_mask, SIGUSR1);
 	sigaddset(&sa->sa_mask, SIGUSR2);
-	sa->sa_flags = 0;
 }
 
 int	main(void)

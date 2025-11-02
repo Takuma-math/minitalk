@@ -6,7 +6,7 @@
 /*   By: takhayas <hayatakucat@icloud.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:09:12 by takhayas          #+#    #+#             */
-/*   Updated: 2025/11/02 00:39:17 by takhayas         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:30:45 by takhayas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	send_char_as_bit(pid_t pid, char c)
 		if ((c & (1 << send_bits)) != 0)
 		{
 			is_kill_error = kill(pid, SIGUSR2);
-			usleep(100);
+			usleep(500);
 		}
 		else
 		{
 			is_kill_error = kill(pid, SIGUSR1);
-			usleep(100);
+			usleep(500);
 		}
 		if (is_kill_error == -1)
 			return (1);
